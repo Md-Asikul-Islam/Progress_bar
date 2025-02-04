@@ -12,3 +12,12 @@ nextBtn.addEventListener("click", () => {
 
   handleUpdateStep();
 });
+
+
+prevBtn.addEventListener("click", () => {
+    if (currentSelectedStep > 1) {
+      currentSelectedStep--;
+    }
+  
+    handleUpdateStep();
+  });
