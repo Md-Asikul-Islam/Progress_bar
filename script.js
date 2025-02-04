@@ -13,11 +13,32 @@ nextBtn.addEventListener("click", () => {
   handleUpdateStep();
 });
 
-
 prevBtn.addEventListener("click", () => {
-    if (currentSelectedStep > 1) {
-      currentSelectedStep--;
+  if (currentSelectedStep > 1) {
+    currentSelectedStep--;
+  }
+
+  handleUpdateStep();
+});
+
+function handleUpdateStep() {
+  iconsWrapper.forEach((item, index) => {
+    if (index < currentSelectedStep) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
     }
-  
-    handleUpdateStep();
   });
+
+  progress.style.width =
+    ((currentSelectedStep - 1) / (iconsWrapper.length - 1)) * 100 + "%";
+
+  if (currentSelectedStep === 1) {
+    prevBtn.disabled = true;
+  } else if (currentSelectedStep === iconsWrapper.length) {
+    nextBtn.disabled = true;
+  } else {
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+}
