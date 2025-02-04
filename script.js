@@ -1,44 +1,31 @@
-const progress = document.querySelector(".progress");
-const prevBtn = document.querySelector(".prev-btn");
-const nextBtn = document.querySelector(".next-btn");
-const iconsWrapper = document.querySelectorAll(".icon-wrapper");
-
-let currentSelectedStep = 1;
-
-nextBtn.addEventListener("click", () => {
-  if (currentSelectedStep < iconsWrapper.length) {
-    currentSelectedStep++;
-  }
-
-  handleUpdateStep();
-});
-
-prevBtn.addEventListener("click", () => {
-  if (currentSelectedStep > 1) {
-    currentSelectedStep--;
-  }
-
-  handleUpdateStep();
-});
-
-function handleUpdateStep() {
-  iconsWrapper.forEach((item, index) => {
-    if (index < currentSelectedStep) {
-      item.classList.add("active");
-    } else {
-      item.classList.remove("active");
+function initializeProgressBar(progressSelector, prevBtnSelector, nextBtnSelector, stepSelector) {
+    const progress = document.querySelector(progressSelector);
+    const prevBtn = document.querySelector(prevBtnSelector);
+    const nextBtn = document.querySelector(nextBtnSelector);
+    const steps = document.querySelectorAll(stepSelector);
+    let currentStep = 1;
+  
+    function updateStep() {
+      steps.forEach((step, index) => {
+        step.classList.toggle("active", index < currentStep);
+      });
+  
+      progress.style.width = `${((currentStep - 1) / (steps.length - 1)) * 100}%`;
+      prevBtn.disabled = currentStep === 1;
+      nextBtn.disabled = currentStep === steps.length;
     }
-  });
-
-  progress.style.width =
-    ((currentSelectedStep - 1) / (iconsWrapper.length - 1)) * 100 + "%";
-
-  if (currentSelectedStep === 1) {
-    prevBtn.disabled = true;
-  } else if (currentSelectedStep === iconsWrapper.length) {
-    nextBtn.disabled = true;
-  } else {
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
+  
+    function changeStep(direction) {
+      currentStep = Math.min(Math.max(currentStep + direction, 1), steps.length);
+      updateStep();
+    }
+  
+    prevBtn.addEventListener("click", () => changeStep(-1));
+    nextBtn.addEventListener("click", () => changeStep(1));
+  
+    updateStep(); // Initialize UI state
   }
-}
+  
+  // Initialize the progress bar
+  initializeProgressBar(".progress", ".prev-btn", ".next-btn", ".icon-wrapper");
+  
